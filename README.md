@@ -13,6 +13,4 @@ Temos que ter o seguinte resultado: Full Cycle Rocks!!
 
 Para testar a imagem execute o seguinte comando
 
-...
-docker push carloskennydocker/fullcycle:tagname
-...
+``` docker push carloskennydocker/fullcycle:tagname ```
