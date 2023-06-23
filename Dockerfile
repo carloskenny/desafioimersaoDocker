@@ -1,13 +1,24 @@
-FROM golang:1.20
+FROM golang:1.20 as builder
 
-WORKDIR /usr/src/app
+RUN mkdir -p /app
+WORKDIR /app
 
-# pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
-COPY go.mod ./
+COPY go.mod .
+
+ENV GOPROXY https://proxy.golang.org,direct
+
 RUN go mod download && go mod verify
 
 COPY . .
 
-RUN go build -v -o /usr/local/bin/app ./...
+ENV CGO_ENABLED=0
 
-CMD ["app"]
+RUN GOOS=linux go build ./desafioImersao.go
+
+FROM scratch
+
+WORKDIR /app
+
+COPY --from=builder /app .
+
+CMD ["/app/desafioImersao"]
